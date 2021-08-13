@@ -1,7 +1,7 @@
-#Overview
+# Overview #
 The Fortinet Fortiweb WAF For AWS solution provides protection against requests that attempt to make your web application server. The following diagram represents the architecture that you can build using the solution implementation guide and the accompanying AWS CloudFormation template. Unlike deploying WAF in a traditional environment, deploying WAF on the cloud is recommended to separate public and private subnets. This solution accepts user traffic through ALB or NLB and distributes it to FortiWeb servers located in different availability zones. Fortiweb checks the request according to the set rules, and then uses its own distribution function to continue to send the processed traffic to the Web server that is located in the private network and needs to be included.
 
-#Protection scene
+# Protection scene #
 Web applications are vulnerable to various attacks. These attacks include specially crafted requests aimed at exploiting vulnerabilities or controlling servers. Large-scale attacks designed to destroy websites; or bad bots and crawlers designed to crawl and steal web content. The solution utilizes AWS CloudFormation to configure quickly and easily, and helps prevent the following common attacks:
 
 **SQL injection:** The attacker inserts malicious SQL code into the web request to extract data from the database. This solution is designed to block web requests that contain potentially malicious SQL code.
@@ -13,29 +13,37 @@ Web applications are vulnerable to various attacks. These attacks include specia
 **Scanner and probe**: Malicious source scans and probes whether there are vulnerabilities in Internet-oriented web applications. They send a series of requests that generate HTTP 4xx error codes, and you can use this history to help identify and block malicious source IP addresses. This solution creates an AWS Lambda function or Amazon Athena query that automatically parses Amazon CloudFront or Application Load Balancer access logs, calculates the number of incorrect requests from unique source IP addresses per minute, and updates AWS WAF to prevent high Further scan error rate of the address of the address-the error rate at which the defined error threshold is reached.
 **Known source of attackers (IP reputation list)**: Many organizations maintain reputation lists of IP addresses operated by known attackers (for example, spammers, malware distributors, and botnets). The solution uses the information in these reputation lists to help you block requests from malicious IP addresses.
 **Zombies and crawlers**: Operators of publicly accessible web applications must trust that clients accessing their content can accurately identify themselves and can use the service as expected. However, some automated clients (such as content crawlers or bad bots) distort themselves to bypass restrictions. This solution can help you identify and stop bad crawlers.
-#Features
-Standard safety capability
-**Protection against OWASP TOP10 threats**: built-in multiple protection strategies, you can choose to protect against SQL injection, XSS cross-site, Web Shell, backdoor, command injection, illegal HTTP protocol requests, common web server vulnerability attacks, unauthorized access to core files, path circulation, and scanning Protection, etc.
+# Features #
+## Standard safety capability ##
+**Protection against OWASP TOP10 threats**: 
+built-in multiple protection strategies, you can choose to protect against SQL injection, XSS cross-site, Web Shell, backdoor, command injection, illegal HTTP protocol requests, common web server vulnerability attacks, unauthorized access to core files, path circulation, and scanning Protection, etc.
+
 **Threat Intelligence**: Massive malicious IP blacklist, including botnets, anonymous agents, phishing websites, spam and other malicious IP blocking capabilities
 Protection against basic malicious crawlers: block malicious access constructed by libcurl, Python scripts, etc.
+
 **HTTP/HTTPS access control**: IP access control, URL access control, target system management background protection
-Advanced security capabilities
-Prevent malicious CC attacks: effectively intercept CC attacks based on comprehensive intelligent analysis such as HTTP access request frequency/TCP connection frequency/human-machine identification
-0day high-precision security defense: Based on a two-layer machine learning engine to build an abnormal threat detection model, it has a high accuracy in identifying web attacks, and can automatically detect unknown attacks such as 0day, effectively reducing attack false alarms.
-Business security capabilities
-Advanced anti-reptile: Based on user-agent, IP, client event and AI-based man-machine recognition technology to accurately identify reptiles.
-Website anti-hotlinking: prevent website resources from being maliciously linked and used by other websites
-Anti-vulnerability scanning: to detect attacks, use tools to scan the website for vulnerabilities, and accurately confirm through human-computer interaction, and finally accurately intercept the attacker
+
+## Advanced security capabilities ##
+**Prevent malicious CC attacks**: effectively intercept CC attacks based on comprehensive intelligent analysis such as HTTP access request frequency/TCP connection frequency/human-machine identification
+zero day 
+
+**high-precision security defense**: Based on a two-layer machine learning engine to build an abnormal threat detection model, it has a high accuracy in identifying web attacks, and can automatically detect unknown attacks such as 0day, effectively reducing attack false alarms.
+## Business security capabilities ##
+**Advanced anti-reptile:** Based on user-agent, IP, client event and AI-based machine recognition technology to accurately identify reptiles.
+
+**Website anti-hotlinking**: prevent website resources from being maliciously linked and used by other websites
+
+**Anti-vulnerability scanning:** to detect attacks, use tools to scan the website for vulnerabilities, and accurately confirm through human-computer interaction, and finally accurately intercept the attacker
 system structure
 
 
-Public private network and private subnet: This scheme creates two different subnets, public subnet and private subnet. It is recommended that the Web server protected by Fortiweb be deployed in a private subnet.
+**Public private network and private subnet:** This scheme creates two different subnets, public subnet and private subnet. It is recommended that the Web server protected by Fortiweb be deployed in a private subnet.
 
-ALB and NLB: The front-end load balance of the Fortiweb server in this solution can be AWS Application Loadblance or Network Load Balance.
+**ALB and NLB:** The front-end load balance of the Fortiweb server in this solution can be AWS Application Loadblance or Network Load Balance.
 
-Automated deployment: This solution provides Clouformation templates. Users can use the ability of infrastructure as code to automate the deployment of the solution. They can choose to create single-node or multi-node clusters to form basic protection capabilities for Web services.
+**Automated deployment:** This solution provides Clouformation templates. Users can use the ability of infrastructure as code to automate the deployment of the solution. They can choose to create single-node or multi-node clusters to form basic protection capabilities for Web services.
 
-High-availability architecture: In order to meet the needs of users for web security, high availability and redundancy, the solution provides an Active-Active-High volume deployment mode to create Fortiweb Master nodes and Fortiweb Slave nodes in different availability zones. If the Master node fails, the slave node will automatically be upgraded to the Master node to ensure high availability of system functions.
+**High-availability architecture:** In order to meet the needs of users for web security, high availability and redundancy, the solution provides an Active-Active-High volume deployment mode to create Fortiweb Master nodes and Fortiweb Slave nodes in different availability zones. If the Master node fails, the slave node will automatically be upgraded to the Master node to ensure high availability of system functions.
 
 **Data flow:** If Internet users want to access a Web server located in a private subnet
 ![](assets/Architect_diagram.png)
@@ -46,8 +54,6 @@ In the fourth step, normal requests will be sent to the protected Web server.
 A protected Web Server located on a private network needs to access the Internet, such as updating software. This kind of request will be forwarded through the NAT Gateway.
 
 How to build
-Please follow the steps below:
-    
 
     cd deployment
     chmod +x ./build-s3-dist.sh \n
@@ -55,8 +61,8 @@ Please follow the steps below:
 
 For example: If you need to be in the S3 bucket (s3bucketname), you need to run
 
-
     ./build-s3-dist.sh s3bucketname s3bucketname fortinet-fortiweb-waf-for-aws v1.0.0 
+
 After running, two directories of /global-s3-assets and /region-s3-assets will be generated in the directory of /deployment
 
     │  ├── global-s3-assets
@@ -72,7 +78,6 @@ After running, two directories of /global-s3-assets and /region-s3-assets will b
             └── lambda-nlb.zip
 
 **File structure**
-
 
     ├── deployment
     │   ├── build-s3-dist.sh[Shell -  ]
@@ -109,7 +114,9 @@ After running, two directories of /global-s3-assets and /region-s3-assets will b
 
 **How to import scene rules**
 
-To import scenario rules, you need to use SSH to remotely log in to the FortiWeb server and import them. Please download the files in the /source/policy/ directory, and select scenarios according to your needs. For example, select the anti-crawler scenario and enter the /source/policy/AntiCrawler directory, the IP address of the FortiWeb server is 178.xx, and the key pair of the EC2 is johnw.pem, please execute the following command.
+To import scenario rules, you need to use SSH to remotely log in to the FortiWeb server and import them. Please download the files in the /source/policy/ directory, and select scenarios according to your needs. 
+
+For example, to select the anti-crawler scenario and enter the /source/policy/AntiCrawler directory, the IP address of the FortiWeb server is 178.xx, and the key pair of the EC2 is johnw.pem, please execute the following command.
 
     ssh -i ~/johnw.pem admin@178.x.x.x > /dev/null 2>&1 < AntiCrawler.txt
 
