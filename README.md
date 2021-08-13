@@ -49,6 +49,7 @@ system structure
 **High-availability architecture:** In order to meet the needs of users for web security, high availability and redundancy, the solution provides an Active-Active-High volume deployment mode to create Fortiweb Master nodes and Fortiweb Slave nodes in different availability zones. If the Master node fails, the slave node will automatically be upgraded to the Master node to ensure high availability of system functions.
 
 ![Archtecture](assets/Architect_diagram.png)
+
 **Data flow:** If Internet users want to access a Web server located in a private subnet
 
 In the first step, the traffic will pass through the Internet Gateway (IGW).
