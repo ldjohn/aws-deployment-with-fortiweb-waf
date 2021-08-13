@@ -11,8 +11,11 @@ Web applications are vulnerable to various attacks. These attacks include specia
 **HTTP flooding**: Web servers and other back-end resources face the risk of distributed denial of service (DDoS) attacks such as HTTP flooding. When the web request from the client exceeds a configurable threshold, this solution will automatically trigger rate-based rules. Alternatively, implement this threshold by processing AWS WAF logs using AWS Lambda functions or Amazon Athena queries.
 
 **Scanner and probe**: Malicious source scans and probes whether there are vulnerabilities in Internet-oriented web applications. They send a series of requests that generate HTTP 4xx error codes, and you can use this history to help identify and block malicious source IP addresses. This solution creates an AWS Lambda function or Amazon Athena query that automatically parses Amazon CloudFront or Application Load Balancer access logs, calculates the number of incorrect requests from unique source IP addresses per minute, and updates AWS WAF to prevent high Further scan error rate of the address of the address-the error rate at which the defined error threshold is reached.
+
 **Known source of attackers (IP reputation list)**: Many organizations maintain reputation lists of IP addresses operated by known attackers (for example, spammers, malware distributors, and botnets). The solution uses the information in these reputation lists to help you block requests from malicious IP addresses.
+
 **Zombies and crawlers**: Operators of publicly accessible web applications must trust that clients accessing their content can accurately identify themselves and can use the service as expected. However, some automated clients (such as content crawlers or bad bots) distort themselves to bypass restrictions. This solution can help you identify and stop bad crawlers.
+
 # Features #
 ## Standard safety capability ##
 **Protection against OWASP TOP10 threats**: 
@@ -45,8 +48,9 @@ system structure
 
 **High-availability architecture:** In order to meet the needs of users for web security, high availability and redundancy, the solution provides an Active-Active-High volume deployment mode to create Fortiweb Master nodes and Fortiweb Slave nodes in different availability zones. If the Master node fails, the slave node will automatically be upgraded to the Master node to ensure high availability of system functions.
 
+![Archtecture](assets/Architect_diagram.png)
 **Data flow:** If Internet users want to access a Web server located in a private subnet
-![](assets/Architect_diagram.png)
+
 In the first step, the traffic will pass through the Internet Gateway (IGW).
 In the second step, it will be forwarded through load balancing (can be ALB type or NLB type)
 In the third step, the request will be forwarded to the FortieWeb server, and the request will be detected according to the configured WAF rules. If you find that the request is malicious, you can choose to log or block the request.
